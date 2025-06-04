@@ -6,16 +6,16 @@ import MyBookingsPage from './pages/MyBookingsPage'
 function App() {
   return (
     <>
+    <div className='bg-amber-300'>AAAAAAAAAA</div>
     <BrowserRouter>
     <Routes>
       <Route path='/' element={<LoginPage/>}/>
       <Route path='/Login' element={<LoginPage/>}/>
+      <Route path='/MyBookingsPage' element={<MyBookingsPage/>}/>
+      <Route path='/HomePage' element={<HomePage/>}/>
     </Routes>
     </BrowserRouter>
     </>
-    // <div className='bg-amber-300'>
-    //   Welcome to FlyMe
-    // </div>
   )
 }
 
