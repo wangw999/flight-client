@@ -9,13 +9,12 @@ const LoginPage = () => {
   const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault() // 阻止事件的默认行为
     setError(null) // 清除之前的错误
     localStorage.removeItem('jwtToken');
     sessionStorage.removeItem('jwtToken');
 
     try {
-      // const response = await axios.post('http://localhost:8081/api/auth/login', {
       const response = await api.post('/auth/login', {
         email,
         password,
@@ -24,7 +23,7 @@ const LoginPage = () => {
       localStorage.setItem('token', response.data.data.token)
 
       // 登录成功，跳转到服务类型页面
-      navigate('/HomePage')
+      navigate('/homePage')
     } catch (err) {
       // 处理错误
       setError('登录失败，请检查邮箱和密码:' + err)

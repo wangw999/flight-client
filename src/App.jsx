@@ -1,7 +1,10 @@
 import { BrowserRouter as Router, Routes, Route, BrowserRouter } from 'react-router-dom'
 import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage'
+import RegisterPage from './pages/RegisterPage'
+import SearchFlightsPage from './pages/SearchFlghtsPage'
 import MyBookingsPage from './pages/MyBookingsPage'
+import SearchResultsPage from './pages/SearchResultsPage'
 import { Link } from 'react-router-dom'
 
 function App() {
@@ -21,10 +24,15 @@ function App() {
         </header>
         <main>
           <Routes>
-            <Route path='/' element={<LoginPage />} />
-            <Route path='/Login' element={<LoginPage />} />
-            <Route path='/MyBookingsPage' element={<MyBookingsPage />} />
-            <Route path='/HomePage' element={<HomePage />} />
+            <Route path='/' element={<SearchFlightsPage />} />
+            <Route path='/login' element={<LoginPage />} />
+            <Route path='/myBookings' element={<MyBookingsPage />} />
+            <Route path='/homePage' element={<HomePage />} />
+            <Route path='/register' element={<RegisterPage />} />
+            <Route path='/searchFlights' element={<SearchFlightsPage />} />
+            <Route path='/SearchResults' element={<SearchResultsPage />} />
+            {/* <Route path='/searchFlights' element={<SearchFlightsPage />} />
+            <Route path='/searchFlights' element={<SearchFlightsPage />} /> */}
           </Routes>
         </main>
         <footer className="bg-gray-800 text-white text-center p-4">
