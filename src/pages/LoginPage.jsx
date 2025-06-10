@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useSearchParams  } from "react-router-dom"
 import api from "../services/http"
 
 const LoginPage = () => {
@@ -7,6 +7,8 @@ const LoginPage = () => {
   const [password, setPassword] = useState('')
   const [error, setError] = useState(null)
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams();
+  const redirectPath = searchParams.get("redirect") || "/";
 
   const handleSubmit = async (e) => {
     e.preventDefault() // 阻止事件的默认行为
@@ -23,7 +25,7 @@ const LoginPage = () => {
       localStorage.setItem('token', response.data.data.token)
 
       // 登录成功，跳转到服务类型页面
-      navigate('/homePage')
+      navigate(redirectPath)
     } catch (err) {
       // 处理错误
       setError('登录失败，请检查邮箱和密码:' + err)

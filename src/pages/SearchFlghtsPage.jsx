@@ -1,5 +1,5 @@
 import React from "react";
-import ReactSvg from "../assets/flight2.png";
+import flight2 from "../assets/flight2.png";
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import api from "../services/http"
@@ -28,7 +28,7 @@ function SearchFlightsPage() {
     try {
       //画面项目业务check
       // const response = await api.post("/XXXXXcheck", formData);
-      navigate("/SearchResults", { state: formData }); // 跳转到检索结果页
+      navigate("/searchResults", { state: formData }); // 跳转到检索结果页
     } catch (err) {
       // 处理错误
       setError("请检查检索信息:" + err.message);
@@ -40,7 +40,7 @@ function SearchFlightsPage() {
       {/* 背景图与标题区域 */}
       <div className="relative rounded-md overflow-hidden">
         <img
-          src={ReactSvg}
+          src={flight2}
           alt="Plane in sky"
           className="w-full h-80 object-cover"
         />

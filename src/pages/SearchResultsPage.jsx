@@ -4,10 +4,14 @@ import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import api from "../services/http"
 
-function SearchResultsPage() {
+const SearchResultsPage = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const searchData = location.state || {};
   const [flightData, setFlightData] = useState([]);
+  const [error, setError] = useState(null);
+  // const [selectedId, setSelectedId] = useState([]);
+
 
   useEffect(() => {
 
@@ -54,20 +58,19 @@ function SearchResultsPage() {
     if (searchData.tripType || searchData.from || searchData.to || searchData.depart || searchData.return) {
       showResults();
     }
-  }, [searchData]);
+  }, []);
+
+  const showResultsDetail = (selectedId) => {
+    navigate(`/showResultDetail/${selectedId}`);
+  }
 
 
   return (
     <div className="container mx-auto p-4">
-      {/* 面包屑 */}
       <div className="text-sm text-gray-500 mb-4">
-        Home / Flights / London to New York
+        Flights : <span className="text-red-600">{searchData.from}</span> to <span className="text-red-600">{searchData.to}</span>
       </div>
-
-      {/* 标题 */}
-      <h2 className="text-xl font-bold mb-4">Select your outbound flight</h2>
-
-      {/* 航班表格 */}
+      <h2 className="text-xl font-bold mb-4">Select your outbound flight </h2>
       <div className="overflow-x-auto">
         <table className="w-full min-w-[600px] text-left border-collapse">
           <thead className="bg-gray-50">
@@ -83,9 +86,8 @@ function SearchResultsPage() {
             </tr>
           </thead>
           <tbody>
-            {flightData.map((flight) => {})}
             {flightData.map((flight) => (
-               <tr
+              <tr
                 key={flight.flightNumber}
                 className="border-b hover:bg-gray-50 transition-colors"
               >
@@ -97,7 +99,7 @@ function SearchResultsPage() {
                 <td className="px-4 py-3">{flight.departureDate} {flight.departureTime}</td>
                 <td className="px-4 py-3">{flight.price}</td>
                 <td className="px-4 py-3">
-                  <button className="text-blue-600 hover:underline">
+                  <button className="text-blue-600 hover:underline" onClick={() => showResultsDetail(flight.flightNumber)}>
                     Select
                   </button>
                 </td>
