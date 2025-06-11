@@ -10,44 +10,19 @@ const SearchResultsPage = () => {
   const searchData = location.state || {};
   const [flightData, setFlightData] = useState([]);
   const [error, setError] = useState(null);
-  // const [selectedId, setSelectedId] = useState([]);
 
 
   useEffect(() => {
 
     const showResults = async (e) => {
-      // alert(searchData.from + "--" + searchData.to + "--" + searchData.depart);
       try {
-        // 构建符合URL格式的参数
         const params = {
           from: searchData.from,
           to: searchData.to,
-          // 确保日期格式为 yyyyMMdd
           date: searchData.depart.replace(/-/g, '')
         };
-
-        // 调用API，使用完整路径
         const response = await api.get("/flights", { params });
-
-        // // 构建请求体数据
-        // const requestData = {
-        //   from: searchData.from,
-        //   to: searchData.to,
-        //   date: searchData.date.replace(/-/g, '') // 格式化为 yyyyMMdd
-        // };
-
-        // // 使用 POST 请求
-        // const response = await api.post("/api/flights/search", requestData);
-
-        // 更新状态
         setFlightData(response.data.data || []);
-
-
-        // // 使用 Axios 发起 GET 请求
-        // axios.get('https://api.example.com/users')
-        //   .then(response => setUsers(response.data))
-        //   .catch(error => console.error('Error:', error));
-
       } catch (err) {
         // 处理错误
         setError("Failed to fetch flights:" + err.message);
@@ -63,7 +38,6 @@ const SearchResultsPage = () => {
   const showResultsDetail = (selectedId) => {
     navigate(`/showResultDetail/${selectedId}`);
   }
-
 
   return (
     <div className="container mx-auto p-4">
@@ -89,8 +63,7 @@ const SearchResultsPage = () => {
             {flightData.map((flight) => (
               <tr
                 key={flight.flightNumber}
-                className="border-b hover:bg-gray-50 transition-colors"
-              >
+                className="border-b hover:bg-gray-50 transition-colors">
                 <td className="px-4 py-3">{flight.flightNumber}</td>
                 <td className="px-4 py-3">{flight.departureAirport.name}</td>
                 <td className="px-4 py-3">{flight.departureAirport.city}</td>

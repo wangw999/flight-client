@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams,useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import api from "../services/http";
 import flight3 from '../assets/flight3.png';
 import flight4 from '../assets/flight4.png';
@@ -16,14 +16,9 @@ const ShowResultDetailPage = () => {
       try {
         setLoading(true);
         setError(null);
-
-        // 调用API获取航班数据
         const response = await api.get(`/flights/${id}`);
-
-        // 更新状态
         setFlightData(response.data.data || {});
       } catch (err) {
-        // 处理错误
         setError("Failed to fetch flight data: " + err.message);
         console.error(err);
       } finally {
@@ -32,9 +27,8 @@ const ShowResultDetailPage = () => {
     };
 
     fetchFlightData();
-  }, [id]); // 添加id作为依赖项，确保id变化时重新获取数据
+  }, [id]);
 
-  // 加载状态
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -42,8 +36,6 @@ const ShowResultDetailPage = () => {
       </div>
     );
   }
-
-  // 错误状态
   if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center p-6">
@@ -58,8 +50,6 @@ const ShowResultDetailPage = () => {
       </div>
     );
   }
-
-  // 数据为空状态
   if (!flightData || Object.keys(flightData).length === 0) {
     return (
       <div className="min-h-screen flex items-center justify-center p-6">
@@ -69,9 +59,7 @@ const ShowResultDetailPage = () => {
   }
 
   const paymentDetail = async (e) => {
-
     try {
-      alert(flightData.id);
       const requestData = {
         flightId: "99A",
         passengerInfo: {
@@ -82,13 +70,11 @@ const ShowResultDetailPage = () => {
         }
       };
       const response = await api.post("/bookings/create", requestData);
-      alert(response.status);
       if (response.status == 201) {
-        navigate(`/myBookings/${id}`);
+        navigate(`/BookingReview/${id}`);
       }
     }
     catch (err) {
-      alert(err.status);
       if (err.status == 401 || err.status == 403) {
         // const currentPath = window.location.pathname;
         navigate(`/login?redirect=${encodeURIComponent(`/myBookings/${id}`)}`);
@@ -99,8 +85,6 @@ const ShowResultDetailPage = () => {
   return (
     <div className="p-6 bg-white max-w-3xl mx-auto">
       <h2 className="text-xl font-bold mb-6">Review your flights</h2>
-
-      {/* 去程航班信息 */}
       <div className="mb-8">
         <h3 className="text-lg font-semibold mb-2">Outbound</h3>
         <div className="flex items-center justify-between">
@@ -116,8 +100,6 @@ const ShowResultDetailPage = () => {
           }}></div>
         </div>
       </div>
-
-      {/* 返程航班信息 */}
       <div className="mb-8">
         <h3 className="text-lg font-semibold mb-2">Return</h3>
         <div className="flex items-center justify-between">
@@ -133,8 +115,6 @@ const ShowResultDetailPage = () => {
           }}></div>
         </div>
       </div>
-
-      {/* 费用总结 */}
       <div className="mb-8">
         <h3 className="text-lg font-semibold mb-4">Fare summary</h3>
         <div className="flex justify-between mb-2">
@@ -151,8 +131,6 @@ const ShowResultDetailPage = () => {
           <span>{flightData?.price || '-'}</span>
         </div>
       </div>
-
-      {/* 继续按钮 */}
       <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
         onClick={() => { paymentDetail() }}>
         Continue to payment

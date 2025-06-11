@@ -12,19 +12,16 @@ const RegisterPage = () => {
     phone: "",
   });
   const [error, setError] = useState("");
-  const navigate = useNavigate(); // 提前初始化 navigate
-
+  const navigate = useNavigate();
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const RegistSubmit = async (e) => { // 添加 async 关键字
+  const RegistSubmit = async (e) => {
     e.preventDefault();
-    setError(""); // 清空之前的错误信息
-
+    setError("");
     try {
-      // 使用 await 等待注册请求完成
       // const response = await api.post("/auth/register", formData);
       const response = await api.post("/auth/register", {
         email: formData.email,
@@ -35,12 +32,11 @@ const RegisterPage = () => {
         phone: formData.phone,
       });
 
-      alert("注册成功");
-      navigate("/login"); // 跳转到登录页
+      alert("Successful registration.");
+      navigate("/login");
     } catch (err) {
-      // 处理错误
-      setError("注册失败，请检查信息:" + err.message);
-      alert(error); // 显示错误提示
+      setError("Registration failed, please check the information:" + err.message);
+      alert(error);
     }
   };
 
@@ -54,26 +50,22 @@ const RegisterPage = () => {
           <div>
             <label
               htmlFor="email"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
+              className="block text-sm font-medium text-gray-700 mb-1">
               Email address
             </label>
             <input
               type="email"
               id="email"
-              name="email"  // 要加上 name 属性，方便 handleChange 获取
+              name="email"
               placeholder="Enter your email address"
               className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:border-blue-500"
               onChange={handleChange}
-              value={formData.email}
-            />
+              value={formData.email}/>
           </div>
-
           <div>
             <label
               htmlFor="password"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
+              className="block text-sm font-medium text-gray-700 mb-1">
               Password
             </label>
             <input
@@ -83,15 +75,12 @@ const RegisterPage = () => {
               placeholder="Create a password"
               className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:border-blue-500"
               onChange={handleChange}
-              value={formData.password}
-            />
+              value={formData.password}/>
           </div>
-
           <div>
             <label
               htmlFor="firstName"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
+              className="block text-sm font-medium text-gray-700 mb-1">
               First name
             </label>
             <input
@@ -101,15 +90,12 @@ const RegisterPage = () => {
               placeholder="Enter your first name"
               className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:border-blue-500"
               onChange={handleChange}
-              value={formData.firstName}
-            />
+              value={formData.firstName}/>
           </div>
-
           <div>
             <label
               htmlFor="lastName"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
+              className="block text-sm font-medium text-gray-700 mb-1">
               Last name
             </label>
             <input
@@ -119,15 +105,12 @@ const RegisterPage = () => {
               placeholder="Enter your last name"
               className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:border-blue-500"
               onChange={handleChange}
-              value={formData.lastName}
-            />
+              value={formData.lastName}/>
           </div>
-
           <div>
             <label
               htmlFor="country"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
+              className="block text-sm font-medium text-gray-700 mb-1" >
               Country/Region
             </label>
             <select
@@ -135,8 +118,7 @@ const RegisterPage = () => {
               name="country"
               className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:border-blue-500"
               onChange={handleChange}
-              value={formData.country}
-            >
+              value={formData.country}>
               <option value="" disabled selected>
                 Select your country/region
               </option>
@@ -145,12 +127,10 @@ const RegisterPage = () => {
               <option value="UK">UK</option>
             </select>
           </div>
-
           <div>
             <label
               htmlFor="phone"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
+              className="block text-sm font-medium text-gray-700 mb-1">
               Phone number
             </label>
             <input
@@ -160,14 +140,11 @@ const RegisterPage = () => {
               placeholder="Enter your phone number"
               className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:border-blue-500"
               onChange={handleChange}
-              value={formData.phone}
-            />
+              value={formData.phone}/>
           </div>
-
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white font-medium py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-          >
+            className="w-full bg-blue-500 text-white font-medium py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
             Register
           </button>
         </form>

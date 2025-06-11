@@ -11,8 +11,8 @@ const LoginPage = () => {
   const redirectPath = searchParams.get("redirect") || "/";
 
   const handleSubmit = async (e) => {
-    e.preventDefault() // 阻止事件的默认行为
-    setError(null) // 清除之前的错误
+    e.preventDefault(); // 阻止事件的默认行为
+    setError(null);
     localStorage.removeItem('jwtToken');
     sessionStorage.removeItem('jwtToken');
 
@@ -21,31 +21,21 @@ const LoginPage = () => {
         email,
         password,
       })
-
       localStorage.setItem('token', response.data.data.token)
-
-      // 登录成功，跳转到服务类型页面
       navigate(redirectPath)
     } catch (err) {
-      // 处理错误
-      setError('登录失败，请检查邮箱和密码:' + err)
+       setError("Login failed, please check your email and password:" + err.message);
     }
   }
 
   return (
     <div className="flex items-center justify-center bg-white" style={{ height: '650px' }}>
-      {/* 外层容器*/}
       <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-6">
-        {/* 标题 */}
         <h2 className="text-xl font-bold text-center text-gray-800 mb-6">
           Welcome back
         </h2>
-
-        {/* 错误提示保持 */}
         {error && <p className="text-red-500 text-center">{error}</p>}
-
         <form onSubmit={handleSubmit}>
-          {/* 邮箱输入框组 */}
           <div className="mb-4">
             <label htmlFor="email" className="block text-gray-700 mb-1">
               Username or email
@@ -60,8 +50,6 @@ const LoginPage = () => {
               required
             />
           </div>
-
-          {/* 密码输入框组 */}
           <div className="mb-6">
             <label htmlFor="password" className="block text-gray-700 mb-1">
               Password
@@ -76,8 +64,6 @@ const LoginPage = () => {
               required
             />
           </div>
-
-          {/* 忘记密码链接*/}
           <div className="mb-6 text-right">
             <a
               href="#"
@@ -86,8 +72,6 @@ const LoginPage = () => {
               Forgot username or password?
             </a>
           </div>
-
-          {/* 登录按钮*/}
           <button
             type="submit"
             className="w-full bg-blue-800 text-white py-2 rounded hover:bg-blue-400 transition duration-200"
@@ -95,8 +79,6 @@ const LoginPage = () => {
             Log in
           </button>
         </form>
-
-        {/* 注册链接 */}
         <div className="mt-4 text-center">
           <span className="text-gray-500">Don't have an account?</span>
           <a href="/register" className="text-blue-500 hover:underline ml-1">
