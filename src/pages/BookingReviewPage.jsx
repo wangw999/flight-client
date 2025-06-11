@@ -30,7 +30,6 @@ const BookingReviewPage = () => {
           divElement_hasData.style.display = 'none';
           divElement_noData.style.display = 'block';
         } else {
-          // 处理错误
           setError("Failed to fetch flight data: " + err.message);
           console.error(err);
         }

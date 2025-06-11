@@ -1,4 +1,5 @@
 import { Routes, Route, BrowserRouter, Link } from 'react-router-dom'
+import React, { useEffect } from "react";
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import SearchFlightsPage from './pages/SearchFlghtsPage'
@@ -8,6 +9,16 @@ import SearchResultsPage from './pages/SearchResultsPage'
 import ShowResultDetailPage from './pages/ShowResultDetailPage'
 
 function App() {
+
+  useEffect(() => {
+    const divElement_login = document.getElementById('loginId');
+    if (!localStorage.getItem('token')) {
+      divElement_login.style.visibility = 'visible';
+    } else {
+      divElement_login.style.visibility  = 'hidden';
+    }
+  },[]);
+
   return (
     <div className='flex flex-col min-h-screen'>
       <BrowserRouter>
@@ -15,9 +26,9 @@ function App() {
           <div className="container mx-auto flex justify-between items-center">
             <h1 className="text-black font-bold">Flight Service System</h1>
             <nav>
-              <Link to="/myBookings" className="mr-5 hover:underline">Book</Link>
-              <Link to="/Login" className="mr-4 hover:underline">Management</Link>
-              <Link to="/Login" className="hover:underline">Log in</Link>
+              <Link to="/" className="mr-5 hover:underline">Book</Link>
+              <Link to="/myBookings" className="mr-4 hover:underline">Management</Link>
+              <Link id='loginId' to="/Login" className="hover:underline">Log in</Link>
             </nav>
           </div>
         </header>

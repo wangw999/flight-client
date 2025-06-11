@@ -36,12 +36,11 @@ const RegisterPage = () => {
       navigate("/login");
     } catch (err) {
       setError("Registration failed, please check the information:" + err.message);
-      alert(error);
     }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
+    <div className="flex flex-col items-center justify-centerbg-gray-100 p-6">
       <div className="w-full max-w-xl bg-white p-6 rounded-md shadow-md">
         <h2 className="text-2xl font-bold text-center mb-6">
           Create your account

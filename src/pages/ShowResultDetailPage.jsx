@@ -78,6 +78,9 @@ const ShowResultDetailPage = () => {
       if (err.status == 401 || err.status == 403) {
         // const currentPath = window.location.pathname;
         navigate(`/login?redirect=${encodeURIComponent(`/myBookings/${id}`)}`);
+      } else {
+        setError("Failed to fetch flight data: " + err.message);
+        console.error(err);
       }
     }
   }
