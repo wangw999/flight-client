@@ -10,14 +10,14 @@ import ShowResultDetailPage from './pages/ShowResultDetailPage'
 
 function App() {
 
-  useEffect(() => {
-    const divElement_login = document.getElementById('loginId');
-    if (!localStorage.getItem('token')) {
-      divElement_login.style.visibility = 'visible';
-    } else {
-      divElement_login.style.visibility  = 'hidden';
-    }
-  },[]);
+  // useEffect(() => {
+  //   const divElement_login = document.getElementById('loginId');
+  //   if (!localStorage.getItem('token')) {
+  //     divElement_login.style.visibility = 'visible';
+  //   } else {
+  //     divElement_login.style.visibility  = 'hidden';
+  //   }
+  // },[]);
 
   return (
     <div className='flex flex-col min-h-screen'>

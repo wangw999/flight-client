@@ -61,17 +61,15 @@ const ShowResultDetailPage = () => {
   const paymentDetail = async (e) => {
     try {
       const requestData = {
-        flightId: "99A",
+        flightNumber: flightData.flightNumber,
         passengerInfo: {
-          "name": "张三",
-          "email": "zhangsan@example.com",
-          "age": 30,
-          "phone": "13800138000"
+          "email": localStorage.getItem('email'),
         }
       };
       const response = await api.post("/bookings/create", requestData);
+      let bookingId = response.data.data.bookingId;
       if (response.status == 201) {
-        navigate(`/BookingReview/${id}`);
+        navigate(`/BookingReview/${bookingId}`);
       }
     }
     catch (err) {

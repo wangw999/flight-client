@@ -21,8 +21,9 @@ const LoginPage = () => {
         email,
         password,
       })
-      localStorage.setItem('token', response.data.data.token)
-      navigate(redirectPath)
+      localStorage.setItem('token', response.data.data.token);
+      localStorage.setItem('email', response.data.data.email);
+      navigate(redirectPath);
     } catch (err) {
        setError("Login failed, please check your email and password:" + err.message);
     }
