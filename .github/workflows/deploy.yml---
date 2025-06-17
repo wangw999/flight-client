@@ -15,6 +15,7 @@ env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   IMAGE_TAG: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:${{ github.sha }}
+  TASK_DEFINITION_FILE: task-definition.json
 
 jobs:
   deploy:
@@ -33,6 +34,9 @@ jobs:
       - name: Login in ECR
         run: aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.$AWS_REGION.amazonaws.com
 
+      - name: Set IMAGE_TAG
+        run: echo "IMAGE_TAG=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:latest" 
+
       - name: Build docker image
         working-directory: ./flight-client
         run: docker build -t $IMAGE_TAG .
@@ -41,10 +45,10 @@ jobs:
         run: docker push $IMAGE_TAG
 
       - name: Fill in image URI in task definition
-        run: sed -i "s/placeholder-this-later/$IMAGE_TAG/" $TASK_DEFINITION_FILE
+        run: sed -i "s/placeholder-this-later/$IMAGE_TAG/" $env.TASK_DEFINITION_FILE
 
       - name: Register new task definition
-        run: TASK_DEF_ARN=$(aws ecs register-task-definition --cli-input-json file://$TASK_DEFINITION_FILE --query 'taskDefinition.taskDefinitionArn' --output text)
+        run: TASK_DEF_ARN=$(aws ecs register-task-definition --cli-input-json file://$env.TASK_DEFINITION_FILE --query 'taskDefinition.taskDefinitionArn' --output text)
              echo "TASK_DEF_ARN=$TASK_DEF_ARN" >> $GITHUB_ENV
     
       - name: Deploy new task definition
