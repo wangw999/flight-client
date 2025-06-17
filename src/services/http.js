@@ -20,4 +20,12 @@ api.interceptors.request.use(
   }
 )
 
+// url：请求地址
+// method：请求方法（GET、POST 等）
+// headers：请求头
+// params：URL 参数
+// data：请求体数据
+// timeout：超时时间
+// baseURL：基础 URL
+
 export default api
