@@ -1,0 +1,81 @@
+
+name: Deploy Flight client app to AMS ECS
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+  ECS_CLUSTER_NAME: ${{ secrets.ECS_CLUSTER_NAME }}
+  ECS_SERVICE_NAME: ${{ secrets.ECS_SERVICE_NAME }}
+  ECS_TASK_DEFINITION: ${{ secrets.ECS_TASK_DEFINITION }}
+  CONTAINER_NAME: ${{ secrets.CONTAINER_NAME }}
+  AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+  IMAGE_TAG: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:${{ github.sha }}
+  TASK_DEFINITION_FILE: task-definition.json
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+          
+      - name: Login to ECR
+        run: |
+          aws ecr get-login-password --region $AWS_REGION | docker login \
+            --username AWS \
+            --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+
+      - name: Build App
+        working-directory: ./flight-client
+        run: pnpm install && pnpm run build --mode production
+
+      - name: Build and tag Docker image
+        working-directory: ./flight-client
+        run: |
+          docker build -t $IMAGE_TAG .
+          docker tag $IMAGE_TAG $ECR_REPOSITORY:latest
+
+      - name: Push Docker image to ECR
+        run: |
+          docker push $IMAGE_TAG
+          docker push $ECR_REPOSITORY:latest
+
+      - name: Download task definition
+        run: |
+          aws ecs describe-task-definition --task-definition $ECS_TASK_DEFINITION --query taskDefinition > $TASK_DEFINITION_FILE
+          sed -i 's|$IMAGE_TAG|'$IMAGE_TAG'|g' $TASK_DEFINITION_FILE
+
+      - name: Register new task definition
+        id: register-task
+        run: |
+          TASK_DEF_ARN=$(aws ecs register-task-definition --cli-input-json file://$TASK_DEFINITION_FILE --query 'taskDefinition.taskDefinitionArn' --output text)
+          echo "task-definition-arn=$TASK_DEF_ARN" >> $GITHUB_ENV
+          echo "::set-output name=task-definition-arn::$TASK_DEF_ARN"
+
+      - name: Deploy new task definition
+        run: |
+          aws ecs update-service \
+            --cluster $ECS_CLUSTER_NAME \
+            --service $ECS_SERVICE_NAME \
+            --task-definition ${{ env.task-definition-arn }} \
+            --force-new-deployment
+
+      - name: Verify deployment
+        run: |
+          aws ecs describe-services \
+            --cluster $ECS_CLUSTER_NAME \
+            --services $ECS_SERVICE_NAME \
+            --query "services[0].events[0:2].message" \
+            --output text    
